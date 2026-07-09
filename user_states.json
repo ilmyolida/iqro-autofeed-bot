@@ -1,0 +1,32 @@
+{
+    "8646010703": {
+        "lang": "en",
+        "source_channel": "@idrokqil09",
+        "keywords": [],
+        "expecting": null,
+        "target_chat": "@oqivaqotaril",
+        "selected_times": [
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "13:24",
+            "13:23",
+            "13:22"
+        ]
+    },
+    "6360110232": {
+        "lang": "uz_lot",
+        "expecting": null,
+        "source_channel": "https://t.me/Kunhikmat",
+        "keywords": [
+            "hikmat"
+        ],
+        "target_chat": "@annuvr",
+        "selected_times": [
+            "23:40",
+            "23:41"
+        ]
+    }
+}
