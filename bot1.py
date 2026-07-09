@@ -32,7 +32,14 @@ API_ID = 33118317
 API_HASH = "53aae636122c27a99a6c211ecc5d0c68"
 REQUIRED_CHANNEL = "oqivaqotaril"
 
-app = Client("iqro_pro_ultra_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+
+app = Client(
+    "iqro_pro_ultra_bot",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN,
+    in_memory=True
+)
 scheduler = AsyncIOScheduler()
 
 SETTINGS_FILE = "user_settings.json"
