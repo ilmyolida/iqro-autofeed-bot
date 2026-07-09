@@ -497,11 +497,22 @@ async def handle_text_inputs(client, message):
         await message.reply(txt["thanks_feedback"])
 
 async def main():
-    scheduler.add_job(cron_checker, "interval", minutes=1)
-    scheduler.start()
-    await app.start()
-    print("🚀 Iqro Pro Ultra Max professional bot serverda muvaffaqiyatli ishga tushdi!")
-    await asyncio.Event().wait()
+    # Pyrogram clientini asinxron context manager orqali ishga tushiramiz
+    async with app:
+        scheduler.add_job(cron_checker, "interval", minutes=1)
+        scheduler.start()
+        print("🚀 Iqro Pro Ultra Max professional bot serverda muvaffaqiyatli ishga tushdi!")
+        # Bot doimiy ishlab turishi uchun cheksiz kutish rejimiga o'tkazamiz
+        await asyncio.Event().wait()
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(main())
+
+
+
+
+
+
+
+
