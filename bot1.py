@@ -1,4 +1,17 @@
 import asyncio
+
+# Python 3.11+ uchun Pyrogram importidan oldin event loop o'rnatamiz
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+# Qolgan importlar shundan keyin keladi:
+from pyrogram import Client, filters, errors
+# ... qolgan barcha kutubxonalar ...
+
+import asyncio
 import json
 import os
 import re
