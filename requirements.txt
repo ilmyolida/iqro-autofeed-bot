@@ -1,3 +1,6 @@
-pyTelegramBotAPI
-APScheduler
+pyrogram
+tgcrypto
+apscheduler
+beautifulsoup4
+httpx
 
