@@ -175,30 +175,54 @@ async def get_post_by_topics_async(channel, keywords):
     return None
 
 # To'liq asinxron va optimallashgan avtomatik tekshiruvchi
+
+
+
 async def cron_checker():
-    now = datetime.now().strftime("%H:%M")
+    print("⏰ Akkaunt (Userbot) orqali arxiv postlarni o'qish tizimi ishga tushdi...")
     settings = load_json(SETTINGS_FILE)
+    now = datetime.now().strftime("%H:%M")
     
     for user_id, config in settings.items():
         user_times = config.get("times", [])
+        
         if now in user_times:
             target_chat = config.get("target_chat")
             source_channel = config.get("source_channel")
-            keywords = config.get("keywords", [])
             
             if not target_chat or not source_channel:
                 continue
+            
+            clean_source = source_channel.replace("@", "").strip()
+            
+            try:
+                print(f"📦 @{clean_source} kanalidan 300 ta eski post tarixlari yuklanyapti...")
+                posts = []
                 
-            content = await get_post_by_topics_async(source_channel, keywords)
-            if content:
-                formatted_text = f"{content}\n\n✍️ **Manba:** {source_channel}\n\n©️iqro 📚🕊️"
-                try:
-                    # Markdown teglari chiroyli chiqishi uchun ParseMode.MARKDOWN qo'shildi
-                    await app.send_message(target_chat, formatted_text, parse_mode=ParseMode.MARKDOWN)
-                except errors.TelegramAPIError as e:
-                    print(f"❌ Kanalga post yuborishda xato ({target_chat}): {e}")
+                # Akkaunt bilan kirilgani uchun limit=300 bemalol ishlaydi!
+                async for message in app.get_chat_history(clean_source, limit=300):
+                    text = message.text or message.caption
+                    
+                    if text and len(text) > 15:
+                        # Reklama filtri
+                        if any(word in text.lower() for word in STOP_WORDS):
+                            continue
+                        posts.append(text)
+                
+                if posts:
+                    # 300 ta eski post ichidan mutlaqo ixtiyoriy (random) bittasini tanlaydi
+                    chosen_content = random.choice(posts)
+                    
+                    # O'zingizning kanalingizga yuboradi
+                    await app.send_message(chat_id=target_chat, text=chosen_content)
+                    print(f"✅ Arxiv post muvaffaqiyatli yuborildi: {target_chat}")
+                else:
+                    print(f"⚠️ Manba kanaldan eski post topilmadi.")
+                    
+            except Exception as e:
+                print(f"❌ Akkaunt orqali tarixni o'qishda xato: {e}")
 
-@app.on_message(filters.command(["start", "help", "savol", "taklif", "privacy"]) & filters.private)
+
 async def commands_handler(client, message):
     user_id = str(message.from_user.id)
     cmd = message.command[0] if message.command else "start"
